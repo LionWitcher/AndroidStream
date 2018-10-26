@@ -4,10 +4,9 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.RemoteException;
-import android.view.IRotationWatcher;
 import android.view.InputEvent;
 
-import com.genymobile.scrcpy.wrappers.ServiceManager;
+import com.verizon.stream.server.wrappers.ServiceManager;
 
 public final class Device {
 

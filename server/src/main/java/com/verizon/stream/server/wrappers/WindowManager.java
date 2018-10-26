@@ -1,7 +1,8 @@
 package com.verizon.stream.server.wrappers;
 
 import android.os.IInterface;
-import android.view.IRotationWatcher;
+
+import com.verizon.stream.server.IRotationWatcher;
 
 public final class WindowManager {
     private final IInterface manager;

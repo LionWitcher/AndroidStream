@@ -8,10 +8,9 @@ import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
-import com.genymobile.scrcpy.wrappers.InputManager;
+import com.verizon.stream.server.wrappers.InputManager;
 
 import java.io.IOException;
-
 
 public class EventController {
 
@@ -91,7 +90,7 @@ public class EventController {
 
     private boolean injectChar(char c) {
         String decomposed = KeyComposition.decompose(c);
-        char[] chars = decomposed != null ? decomposed.toCharArray() : new char[] {c};
+        char[] chars = decomposed != null ? decomposed.toCharArray() : new char[]{c};
         KeyEvent[] events = charMap.getEvents(chars);
         if (events == null) {
             return false;

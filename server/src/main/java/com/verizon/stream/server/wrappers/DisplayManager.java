@@ -2,8 +2,8 @@ package com.verizon.stream.server.wrappers;
 
 import android.os.IInterface;
 
-import com.genymobile.scrcpy.DisplayInfo;
-import com.genymobile.scrcpy.Size;
+import com.verizon.stream.server.DisplayInfo;
+import com.verizon.stream.server.Size;
 
 public final class DisplayManager {
     private final IInterface manager;

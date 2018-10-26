@@ -7,7 +7,7 @@ import android.media.MediaFormat;
 import android.os.IBinder;
 import android.view.Surface;
 
-import com.genymobile.scrcpy.wrappers.SurfaceControl;
+import com.verizon.stream.server.wrappers.SurfaceControl;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
