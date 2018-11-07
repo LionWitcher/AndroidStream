@@ -1,4 +1,4 @@
-package com.verizon.stream.server;
+package com.verizon.stream.utils;
 
 import android.util.Log;
 
