@@ -191,7 +191,6 @@ public class ScreenDecoder extends Thread {
         try {
 //            MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
             info = new MediaCodec.BufferInfo();
-            info.set();
             while (mRunning) {
                 if (mConfigured) {
                     int index = mCodec.dequeueOutputBuffer(info, mTimeoutUs);
