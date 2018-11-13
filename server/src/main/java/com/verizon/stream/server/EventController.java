@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import com.verizon.stream.server.wrappers.InputManager;
+import com.verizon.stream.utils.Ln;
 
 import java.io.IOException;
 
@@ -62,26 +63,26 @@ public class EventController {
     }
 
     private void handleEvent() throws IOException {
-        ControlEvent controlEvent = connection.receiveControlEvent();
-        switch (controlEvent.getType()) {
-            case ControlEvent.TYPE_KEYCODE:
-                injectKeycode(controlEvent.getAction(), controlEvent.getKeycode(), controlEvent.getMetaState());
-                break;
-            case ControlEvent.TYPE_TEXT:
-                injectText(controlEvent.getText());
-                break;
-            case ControlEvent.TYPE_MOUSE:
-                injectMouse(controlEvent.getAction(), controlEvent.getButtons(), controlEvent.getPosition());
-                break;
-            case ControlEvent.TYPE_SCROLL:
-                injectScroll(controlEvent.getPosition(), controlEvent.getHScroll(), controlEvent.getVScroll());
-                break;
-            case ControlEvent.TYPE_COMMAND:
-                executeCommand(controlEvent.getAction());
-                break;
-            default:
-                // do nothing
-        }
+//        ControlEvent controlEvent = connection.receiveControlEvent();
+//        switch (controlEvent.getType()) {
+//            case ControlEvent.TYPE_KEYCODE:
+//                injectKeycode(controlEvent.getAction(), controlEvent.getKeycode(), controlEvent.getMetaState());
+//                break;
+//            case ControlEvent.TYPE_TEXT:
+//                injectText(controlEvent.getText());
+//                break;
+//            case ControlEvent.TYPE_MOUSE:
+//                injectMouse(controlEvent.getAction(), controlEvent.getButtons(), controlEvent.getPosition());
+//                break;
+//            case ControlEvent.TYPE_SCROLL:
+//                injectScroll(controlEvent.getPosition(), controlEvent.getHScroll(), controlEvent.getVScroll());
+//                break;
+//            case ControlEvent.TYPE_COMMAND:
+//                executeCommand(controlEvent.getAction());
+//                break;
+//            default:
+//                // do nothing
+//        }
     }
 
     private boolean injectKeycode(int action, int keycode, int metaState) {
