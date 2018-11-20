@@ -1,15 +1,23 @@
 package com.verizon.stream.server;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Process;
+import android.os.UserHandle;
+import android.support.annotation.MainThread;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.verizon.stream.utils.Ln;
 
 import java.io.IOException;
-
-import io.socket.client.IO;
-import io.socket.client.Socket;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +25,54 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        try {
+            java.lang.Process root = Runtime.getRuntime().exec("su");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        runCommandWait("pm grant " + getPackageName() + " android.permission.ACCESS_SURFACE_FLINGER", false);
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        String[] permissions = new String[]{
+                "android.permission.INJECT_EVENTS",
+                "android.permission.ACCESS_MOCK_LOCATION",
+                "android.permission.CAPTURE_VIDEO_OUTPUT",
+                "android.permission.ACCESS_SURFACE_FLINGER",
+                "android.permission.BIND_SCREENING_SERVICE",
+                "android.Manifest.permission.GRANT_RUNTIME_PERMISSIONS"};
+        requestPermissions(permissions, 0);
+
+        for (String perm : permissions) {
+            Log.e("MainActivity", "permission: " + perm + " " + checkSelfPermission(perm));
+        }
+
+
+//        String[] args = new String[]{"0", "8000000"};
+//        final Options options = createOptions(args);
+//        Ln.i("Options: " + options);
+//
+//        try {
+//            scrcpy(options);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("MainActivity", String.format("requestCode: %d, resultCode: %d, data: %s", requestCode, resultCode, data));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.e("MainActivity", String.format("requestCode: %d, permissions: %s, grants: %s", requestCode, Arrays.toString(permissions), Arrays.toString(grantResults)));
 
         String[] args = new String[]{"0", "8000000"};
         final Options options = createOptions(args);
@@ -27,20 +83,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        Options options = createOptions();
-//        try {
-//            scrcpy(options);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        makeAppSystem("com.verizon.stream.server");
-//        checkPermissions();
-//        try {
-//            socketServer.writeByteBuffer(ByteBuffer.wrap(new byte[1]));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public static void main(String... args) throws Exception {
@@ -52,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         });
         String[] argsx = new String[]{"0", "8000000"};
         final Options options = createOptions(argsx);
-        Ln.i("Options: " + options);
+        Ln.i("Options: " + Arrays.toString(argsx));
 
         try {
             scrcpy(options);
@@ -139,5 +181,25 @@ public class MainActivity extends AppCompatActivity {
         int x = Integer.parseInt(tokens[2]);
         int y = Integer.parseInt(tokens[3]);
         return new Rect(x, y, x + width, y + height);
+    }
+
+    // Подсобная функция, которая просто выполняет shell-команду
+    static public boolean runCommandWait(String cmd, boolean needsu) {
+        try {
+            String su = "sh";
+            if (needsu) {
+                su = "su";
+            }
+
+            java.lang.Process process = Runtime.getRuntime().exec(new String[]{su, "-c", cmd});
+            int result = process.waitFor();
+
+            return (result == 0);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

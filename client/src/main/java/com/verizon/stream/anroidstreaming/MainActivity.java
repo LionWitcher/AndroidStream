@@ -1,27 +1,32 @@
 package com.verizon.stream.anroidstreaming;
 
-import android.hardware.display.VirtualDisplay;
-import android.media.MediaPlayer;
-import android.media.projection.MediaProjection;
+import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.location.LocationProvider;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.IccOpenLogicalChannelResponse;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.TextureView;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.verizon.stream.utils.Constants;
-import com.verizon.stream.utils.IO;
 import com.verizon.stream.utils.LOG;
 
-import java.net.Socket;
+import org.json.JSONObject;
+
 import java.nio.ByteBuffer;
 
-public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback, SocketClient.Listener {
+public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback, SocketClient.Listener, View.OnTouchListener {
     private static final String LOG_TAG = "MainActivity";
     private TextView mStatusText;
     private Button mConnectButton;
@@ -61,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         SurfaceView surfaceView = new SurfaceView(MainActivity.this);
         surfaceView.getHolder().addCallback(MainActivity.this);
+        surfaceView.setOnTouchListener(this);
         setContentView(surfaceView);
 
         mDecoder = new ScreenDecoder(surfaceView.getHolder().getSurface());
@@ -106,8 +112,43 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         mDecoder.decodeSample(byteBuffer.array(), 0, byteBuffer.array().length, 0, 0);
     }
 
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        JSONObject touchData = new JSONObject();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+//                    touchData.put("type", KEY_FINGER_DOWN);
+                break;
+            case MotionEvent.ACTION_MOVE:
+//                    touchData.put(KEY_EVENT_TYPE, KEY_FINGER_MOVE);
+                break;
+            case MotionEvent.ACTION_UP:
+//                    touchData.put(KEY_EVENT_TYPE, KEY_FINGER_UP);
+                break;
+            default:
+                return true;
+        }
+//        dispatchTouchEvent(MotionEvent.obtain(
+//                SystemClock.uptimeMillis(), SystemClock.uptimeMillis(),
+//                MotionEvent.ACTION_DOWN, Xinput, Yinput, 0));
+        Log.e(LOG_TAG, "onTouch: " + event.toString());
+//            touchData.put("x", motionEvent.getX()/deviceWidth);
+//            touchData.put("y", motionEvent.getY()/deviceHeight);
+//            Log.d(TAG, "Sending = " + touchData.toString());
+//            if (touchSocket != null) {
+//                touchSocket.send(touchData.toString());
+//            } else {
+//                Log.e(TAG, "Can't send touch events. Socket is null.");
+//            }
+
+        return true;
+    }
+
 //    private static boolean bKeyFrame(byte[] frameData) {
 //        return ( ( (frameData[4] & 0xFF) & 0x0F) == 0x07);
 //    }
+
+
+
 }
 
